@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskMaster.Entities.Enums;
+﻿using TaskMaster.Entities.Enums;
 
 namespace TaskMaster.Entities.DTOs.Common
 {

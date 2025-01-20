@@ -4,7 +4,6 @@ using TaskMaster.Entities.DTOs;
 using TaskMaster.Entities.DTOs.Common;
 using TaskMaster.Entities.Enums;
 using TaskMaster.Entities.Master;
-using TaskMaster.Entities.Security;
 
 namespace TaskMaster.Controllers
 {
@@ -122,14 +121,15 @@ namespace TaskMaster.Controllers
         }
 
         /// <summary>
-        ///  Atualizar o projeto do usuário
+        ///
         /// </summary>
         /// <remarks>
         /// -UserId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
         /// -UserId = 123e4567-e89b-12d3-a456-426655440001 = manager;
         /// </remarks>
-        /// <param name="userID"></param>
-        /// <returns>o projeto específico do usuário</returns>
+        /// <param name="userId"></param>
+        /// <param name="Commentdata"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("Update")]
         public async Task<IActionResult> Update(string userId, Comment Commentdata)
@@ -155,14 +155,15 @@ namespace TaskMaster.Controllers
         }
 
         /// <summary>
-        ///  Excluir o projeto do usuário
+        ///
         /// </summary>
         /// <remarks>
         /// -UserId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
         /// -UserId = 123e4567-e89b-12d3-a456-426655440001 = manager;
         /// </remarks>
-        /// <param name="userID"></param>
-        /// <returns>o projeto específico do usuário</returns>
+        /// <param name="id"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("Delete")]
         public async Task<IActionResult> Delete(string id, string userId)

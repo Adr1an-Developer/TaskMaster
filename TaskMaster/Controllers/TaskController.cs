@@ -3,8 +3,6 @@ using TaskMaster.Domain.Services.Abstractions;
 using TaskMaster.Entities.DTOs;
 using TaskMaster.Entities.DTOs.Common;
 using TaskMaster.Entities.Enums;
-using TaskMaster.Entities.Master;
-using TaskMaster.Entities.Security;
 
 namespace TaskMaster.Controllers
 {
@@ -32,7 +30,7 @@ namespace TaskMaster.Controllers
         /// <param name="userID"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("getAll/{projectId}/{userID}")]
+        [Route("getAll/{projectId}/user/{userID}")]
         public async Task<IActionResult> GetAll(string projectId, string userID)
         {
             var valid = await _validateUserService.ValidateUserId(userID);

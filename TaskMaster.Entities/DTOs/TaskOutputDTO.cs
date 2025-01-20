@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
-using TaskMaster.Entities.Common;
+﻿using TaskMaster.Entities.Common;
 using TaskMaster.Entities.Master;
 
 namespace TaskMaster.Entities.DTOs

@@ -4,7 +4,6 @@ using TaskMaster.Entities.DTOs;
 using TaskMaster.Entities.DTOs.Common;
 using TaskMaster.Entities.Enums;
 using TaskMaster.Entities.Master;
-using TaskMaster.Entities.Security;
 
 namespace TaskMaster.Controllers
 {
@@ -151,6 +150,7 @@ namespace TaskMaster.Controllers
 
             return Ok(result);
         }
+
         /// <summary>
         ///  Excluir o projeto do usuário
         /// </summary>

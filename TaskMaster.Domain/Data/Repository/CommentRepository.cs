@@ -1,13 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using TaskMaster.Domain.Data.Abstractions;
-using TaskMaster.Entities.DTOs;
-using TaskMaster.Entities.Master;
 
 namespace TaskMaster.Domain.Data.Repository
 {

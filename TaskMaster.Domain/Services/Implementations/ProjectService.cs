@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Linq;
-using TaskMaster.Domain.Data.Abstractions;
+﻿using TaskMaster.Domain.Data.Abstractions;
 using TaskMaster.Domain.Services.Abstractions;
 using TaskMaster.Entities.DTOs;
 using TaskMaster.Entities.DTOs.Common;

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskMaster.Domain.Data.Abstractions;
+﻿using TaskMaster.Domain.Data.Abstractions;
 using TaskMaster.Domain.Services.Abstractions;
 using TaskMaster.Entities.DTOs.Common;
 using TaskMaster.Entities.Enums;
-using TaskMaster.Entities.Master;
 
 namespace TaskMaster.Domain.Services.Implementations
 {
