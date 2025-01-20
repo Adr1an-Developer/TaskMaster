@@ -14,6 +14,7 @@ namespace TaskMaster.AutofacModule
 
             builder.RegisterType<ValidateUserRepository>().As<IValidateUserRepository>().InstancePerLifetimeScope();
             builder.RegisterType<ProjectRepository>().As<IProjectRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<TaskRepository>().As<ITaskRepository>().InstancePerLifetimeScope();
         }
     }
 }

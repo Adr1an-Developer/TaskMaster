@@ -8,8 +8,8 @@ namespace TaskMaster.Entities.Enums
 {
     public enum TaskStatus
     {
-        Pending,
-        InProgress,
-        Completed
+        Pendente,
+        EmAndamento,
+        Concluído
     }
 }

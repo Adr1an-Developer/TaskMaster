@@ -19,6 +19,10 @@ namespace TaskMaster.AutofacModule
                  .RegisterType<ProjectService>()
                  .As<IProjectService>()
                  .InstancePerLifetimeScope();
+            builder
+                 .RegisterType<TaskService>()
+                 .As<ITaskService>()
+                 .InstancePerLifetimeScope();
         }
     }
 }

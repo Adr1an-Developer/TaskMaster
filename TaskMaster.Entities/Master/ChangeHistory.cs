@@ -15,11 +15,13 @@ namespace TaskMaster.Entities.Master
         [Column("id")]
         public string Id { get; set; } = string.Empty;
 
-        public Guid TaskId
+        [Column("task_id")]
+        public string TaskId
         {
             get; set;
         }
 
+        [Column("change_details")]
         public string ChangeDetails
         {
             get; set;

@@ -8,8 +8,8 @@ namespace TaskMaster.Entities.Enums
 {
     public enum TaskPriority
     {
-        Low,
-        Medium,
-        High
+        Baixa,
+        Média,
+        Alta
     }
 }

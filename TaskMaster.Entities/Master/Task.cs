@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using TaskMaster.Entities.Common;
 using TaskMaster.Entities.Enums;
 
@@ -43,9 +44,11 @@ namespace TaskMaster.Entities.Master
             get; set;
         }
 
+        [JsonIgnore]
         [NotMapped]
         public List<Comment> Comments { get; set; } = new List<Comment>();
 
+        [JsonIgnore]
         [NotMapped]
         public List<ChangeHistory> ChangeHistories { get; set; } = new List<ChangeHistory>();
 

@@ -33,7 +33,7 @@ namespace TaskMaster.Entities.Master
         {
             get
             {
-                return !Tasks.Any(x => x.Status != nameof(Enums.TaskStatus.Completed));
+                return !Tasks.Any(x => x.Status != nameof(Enums.TaskStatus.Concluído));
             }
         }
 

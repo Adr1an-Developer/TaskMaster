@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskMaster.Entities\TaskMaster.Entities.csproj" />
+    <ProjectReference Include="..\TaskMaster.Helpers\TaskMaster.Helpers.csproj" />
   </ItemGroup>
 
 </Project>
