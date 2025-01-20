@@ -15,7 +15,7 @@ namespace TaskMaster.Domain.Data.Repository
             var rows = await (from p in Context.GetDbSet<Project>()
                               where p.IsDeleted == false
                               && p.IsActive == true
-                              && p.CreateByUser == LoggedUserId
+                              && p.CreateByUser == LoggeduserId
                               select new Project()
                               {
                                   CreateByUser = p.CreateByUser,
@@ -38,7 +38,7 @@ namespace TaskMaster.Domain.Data.Repository
             var row = await (from p in Context.GetDbSet<Project>()
                              where p.IsActive == true
                              && p.IsDeleted == false
-                             && p.CreateByUser == LoggedUserId
+                             && p.CreateByUser == LoggeduserId
                              && p.Id.Equals(id)
                              select new Project()
                              {
@@ -61,7 +61,7 @@ namespace TaskMaster.Domain.Data.Repository
             var row = await (from p in Context.GetDbSet<Project>()
                              where p.IsActive == true
                              && p.IsDeleted == false
-                             && p.CreateByUser == LoggedUserId
+                             && p.CreateByUser == LoggeduserId
                              && p.Name.Equals(name)
                              select new Project()
                              {

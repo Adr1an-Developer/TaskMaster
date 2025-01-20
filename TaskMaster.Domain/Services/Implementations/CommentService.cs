@@ -33,7 +33,7 @@ namespace TaskMaster.Domain.Services.Implementations
                     Id = newId,
                     TaskId = entity.TaskId,
                     Description = entity.Description,
-                    CreateByUser = userInfo.UserId,
+                    CreateByUser = userInfo.userId,
                     IsActive = true,
                     IsDeleted = false,
                     CreationDate = DateTime.UtcNow,
@@ -247,7 +247,7 @@ namespace TaskMaster.Domain.Services.Implementations
             try
             {
                 entity.ModificationDate = DateTime.Now;
-                entity.UpdateByUser = userInfo.UserId;
+                entity.UpdateByUser = userInfo.userId;
 
                 await _repository.Update(entity);
                 await _repository.UnitOfWork.SaveAsync();
@@ -257,7 +257,7 @@ namespace TaskMaster.Domain.Services.Implementations
                 var history = new ChangeHistory
                 {
                     Id = newId,
-                    CreateByUser = userInfo.UserId,
+                    CreateByUser = userInfo.userId,
                     ChangeDetails = $"Um comentário foi adicionado à tarefa.",
                     TaskId = entity.Id,
                     IsActive = true,

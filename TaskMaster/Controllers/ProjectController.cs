@@ -4,6 +4,7 @@ using TaskMaster.Entities.DTOs;
 using TaskMaster.Entities.DTOs.Common;
 using TaskMaster.Entities.Enums;
 using TaskMaster.Entities.Master;
+using TaskMaster.Entities.Security;
 
 namespace TaskMaster.Controllers
 {
@@ -24,16 +25,30 @@ namespace TaskMaster.Controllers
         ///  Obter todos os projetos do usuário
         /// </summary>
         /// <remarks>
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440001 = manager;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440001 = manager;
         /// </remarks>
-        /// <param name="userID"></param>
+        /// <param name="userId"></param>
         /// <returns>todos os projetos do usuário</returns>
         [HttpGet]
-        [Route("getAll/{userID}")]
-        public async Task<IActionResult> GetAll(string userID)
+        [Route("getAll/{userId}")]
+        public async Task<IActionResult> GetAll(string userId)
         {
-            var valid = await _validateUserService.ValidateUserId(userID);
+            if (string.IsNullOrEmpty(userId))
+            {
+                var notFound = new ResultNotFound()
+                {
+                    messageType = nameof(MessageTypeResultEnum.Warning),
+                    error = true,
+                    messages = new string[]
+                    {
+                        "userId não pode estar vazio"
+                    }
+                };
+                return Unauthorized(notFound);
+            }
+
+            var valid = await _validateUserService.ValidateUserId(userId);
 
             if (valid.error)
             {
@@ -56,15 +71,29 @@ namespace TaskMaster.Controllers
         ///  Obtém o projeto específico do usuário
         /// </summary>
         /// <remarks>
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440001 = manager;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440001 = manager;
         /// </remarks>
-        /// <param name="userID"></param>
+        /// <param name="userId"></param>
         /// <returns>o projeto específico do usuário</returns>
         [HttpGet]
         [Route("get/{id}/user/{userId}")]
         public async Task<IActionResult> Get(string id, string userId)
         {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(id))
+            {
+                var notFound = new ResultNotFound()
+                {
+                    messageType = nameof(MessageTypeResultEnum.Warning),
+                    error = true,
+                    messages = new string[]
+                    {
+                        "userId ou id não pode estar vazio"
+                    }
+                };
+                return Unauthorized(notFound);
+            }
+
             var valid = await _validateUserService.ValidateUserId(userId);
 
             if (valid.error)
@@ -88,16 +117,30 @@ namespace TaskMaster.Controllers
         ///  criar projeto de usuário
         /// </summary>
         /// <remarks>
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440001 = manager;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440001 = manager;
         /// </remarks>
-        /// <param name="userID"></param>
+        /// <param name="userId"></param>
         /// <returns>o projeto específico do usuário</returns>
         [HttpPost]
         [Route("add")]
         public async Task<IActionResult> post([FromBody] AddProjectDTO project)
         {
-            var valid = await _validateUserService.ValidateUserId(project.UserId);
+            if (project == null || !ModelState.IsValid) // Check if the model is valid
+            {
+                var notFound = new ResultNotFound()
+                {
+                    messageType = nameof(MessageTypeResultEnum.Warning),
+                    error = true,
+                    messages = new string[]
+                    {
+                        "os parâmetros obrigatórios não podem estar vazios"
+                    }
+                };
+                return Unauthorized(notFound);
+            }
+
+            var valid = await _validateUserService.ValidateUserId(project.userId);
 
             if (valid.error)
             {
@@ -122,48 +165,83 @@ namespace TaskMaster.Controllers
         ///  Atualizar o projeto do usuário
         /// </summary>
         /// <remarks>
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440001 = manager;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440001 = manager;
         /// </remarks>
-        /// <param name="userID"></param>
+        /// <param name="userId"></param>
         /// <returns>o projeto específico do usuário</returns>
         [HttpPut]
         [Route("Update")]
         public async Task<IActionResult> Update(string userId, Project projectdata)
         {
-            var valid = await _validateUserService.ValidateUserId(userId);
-
-            if (valid.error)
+            try
             {
-                var notFound = new ResultNotFound()
+                if (string.IsNullOrEmpty(userId) || projectdata == null || !ModelState.IsValid) // Check if the model is valid
                 {
-                    messageType = nameof(MessageTypeResultEnum.Warning),
-                    error = true,
-                    messages = valid.messages
-                };
+                    var notFound = new ResultNotFound()
+                    {
+                        messageType = nameof(MessageTypeResultEnum.Warning),
+                        error = true,
+                        messages = new string[]
+                        {
+                        "userId ou id não pode estar vazio"
+                        }
+                    };
+                    return Unauthorized(notFound);
+                }
 
-                return Unauthorized(notFound);
+                var valid = await _validateUserService.ValidateUserId(userId);
+
+                if (valid != null)
+                {
+                    var notFound = new ResultNotFound()
+                    {
+                        messageType = nameof(MessageTypeResultEnum.Warning),
+                        error = true,
+                        messages = valid.messages
+                    };
+
+                    return Unauthorized(notFound);
+                }
+                if (projectdata == null) return BadRequest();
+
+                var result = await _projectService.Update(projectdata, valid.result);
+
+                return Ok(result);
             }
-            if (projectdata == null) return BadRequest();
-
-            var result = await _projectService.Update(projectdata, valid.result);
-
-            return Ok(result);
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
         ///  Excluir o projeto do usuário
         /// </summary>
         /// <remarks>
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440001 = manager;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440001 = manager;
         /// </remarks>
-        /// <param name="userID"></param>
+        /// <param name="userId"></param>
         /// <returns>o projeto específico do usuário</returns>
         [HttpDelete]
         [Route("Delete")]
         public async Task<IActionResult> Delete(string id, string userId)
         {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(id))
+            {
+                var notFound = new ResultNotFound()
+                {
+                    messageType = nameof(MessageTypeResultEnum.Warning),
+                    error = true,
+                    messages = new string[]
+                    {
+                        "userId ou id não pode estar vazio"
+                    }
+                };
+                return Unauthorized(notFound);
+            }
+
             var valid = await _validateUserService.ValidateUserId(userId);
 
             if (valid.error)

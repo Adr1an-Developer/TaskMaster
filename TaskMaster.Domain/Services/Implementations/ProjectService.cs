@@ -26,7 +26,7 @@ namespace TaskMaster.Domain.Services.Implementations
             {
                 var item = await _repository.FindByConditionAsync(x => x.Name.Trim().ToLower() == entity.Name.Trim().ToLower()
                                                                  && x.IsDeleted == false
-                                                                 && x.CreateByUser == userInfo.UserId);
+                                                                 && x.CreateByUser == userInfo.userId);
 
                 if (item.Any())
                 {
@@ -48,7 +48,7 @@ namespace TaskMaster.Domain.Services.Implementations
                     Id = newId,
                     Name = entity.Name,
                     Description = entity.Description,
-                    CreateByUser = userInfo.UserId,
+                    CreateByUser = userInfo.userId,
                     IsActive = true,
                     IsDeleted = false,
                     CreationDate = DateTime.UtcNow,
@@ -344,7 +344,7 @@ namespace TaskMaster.Domain.Services.Implementations
             try
             {
                 entity.ModificationDate = DateTime.Now;
-                entity.UpdateByUser = userInfo.UserId;
+                entity.UpdateByUser = userInfo.userId;
 
                 await _repository.Update(entity);
                 await _repository.UnitOfWork.SaveAsync();

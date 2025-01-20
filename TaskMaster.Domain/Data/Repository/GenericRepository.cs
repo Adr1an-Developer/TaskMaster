@@ -9,7 +9,7 @@ namespace TaskMaster.Domain.Data.Repository
     {
         protected readonly IEfDbContext Context;
 
-        public string LoggedUserId
+        public string LoggeduserId
         {
             get; private set;
         }
@@ -28,7 +28,7 @@ namespace TaskMaster.Domain.Data.Repository
 
         public void SetLoggedUserInfo(UserLogged userInfo)
         {
-            LoggedUserId = userInfo.UserId;
+            LoggeduserId = userInfo.userId;
             IsManager = userInfo.IsManager;
         }
 

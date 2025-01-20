@@ -10,7 +10,7 @@ namespace TaskMaster.Domain.Data.Abstractions
             get;
         }
 
-        string LoggedUserId
+        string LoggeduserId
         {
             get;
         }

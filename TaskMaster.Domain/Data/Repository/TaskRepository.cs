@@ -15,7 +15,7 @@ namespace TaskMaster.Domain.Data.Repository
             var rows = await (from t in Context.GetDbSet<Entities.Master.Task>()
                               where t.IsDeleted == false
                               && t.IsActive == true
-                              && t.CreateByUser == LoggedUserId
+                              && t.CreateByUser == LoggeduserId
                               && t.ProjectId == ProjectId
                               select new Entities.Master.Task()
                               {
@@ -43,7 +43,7 @@ namespace TaskMaster.Domain.Data.Repository
             var row = await (from t in Context.GetDbSet<Entities.Master.Task>()
                              where t.IsActive == true
                              && t.IsDeleted == false
-                             && t.CreateByUser == LoggedUserId
+                             && t.CreateByUser == LoggeduserId
                              && t.Id.Equals(id)
                              select new Entities.Master.Task()
                              {
@@ -70,7 +70,7 @@ namespace TaskMaster.Domain.Data.Repository
             var row = await (from t in Context.GetDbSet<Entities.Master.Task>()
                              where t.IsActive == true
                              && t.IsDeleted == false
-                             && t.CreateByUser == LoggedUserId
+                             && t.CreateByUser == LoggeduserId
                              && t.Title.Equals(title)
                              select new Entities.Master.Task()
                              {

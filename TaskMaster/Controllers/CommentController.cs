@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mysqlx.Crud;
+using System.Threading.Tasks;
 using TaskMaster.Domain.Services.Abstractions;
 using TaskMaster.Entities.DTOs;
 using TaskMaster.Entities.DTOs.Common;
 using TaskMaster.Entities.Enums;
 using TaskMaster.Entities.Master;
+using TaskMaster.Entities.Security;
 
 namespace TaskMaster.Controllers
 {
@@ -24,17 +27,31 @@ namespace TaskMaster.Controllers
         ///
         /// </summary>
         /// <remarks>
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440001 = manager;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440001 = manager;
         /// </remarks>
         /// <param name="taskId"></param>
-        /// <param name="userID"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("getAll/{taskId}/user/{userID}")]
-        public async Task<IActionResult> GetAll(string taskId, string userID)
+        [Route("getAll/{taskId}/user/{userId}")]
+        public async Task<IActionResult> GetAll(string taskId, string userId)
         {
-            var valid = await _validateUserService.ValidateUserId(userID);
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(taskId))
+            {
+                var notFound = new ResultNotFound()
+                {
+                    messageType = nameof(MessageTypeResultEnum.Warning),
+                    error = true,
+                    messages = new string[]
+                    {
+                        "userId ou taskId não pode estar vazio"
+                    }
+                };
+                return Unauthorized(notFound);
+            }
+
+            var valid = await _validateUserService.ValidateUserId(userId);
 
             if (valid.error)
             {
@@ -57,8 +74,8 @@ namespace TaskMaster.Controllers
         ///
         /// </summary>
         ///  /// <remarks>
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440001 = manager;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440001 = manager;
         /// </remarks>
         /// <param name="id"></param>
         /// <param name="userId"></param>
@@ -67,6 +84,20 @@ namespace TaskMaster.Controllers
         [Route("get/{id}/user/{userId}")]
         public async Task<IActionResult> Get(string id, string userId)
         {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(id))
+            {
+                var notFound = new ResultNotFound()
+                {
+                    messageType = nameof(MessageTypeResultEnum.Warning),
+                    error = true,
+                    messages = new string[]
+                    {
+                        "userId ou id não pode estar vazio"
+                    }
+                };
+                return Unauthorized(notFound);
+            }
+
             var valid = await _validateUserService.ValidateUserId(userId);
 
             if (valid.error)
@@ -90,16 +121,30 @@ namespace TaskMaster.Controllers
         ///
         /// </summary>
         /// <remarks>
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440001 = manager;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440001 = manager;
         /// </remarks>
         /// <param name="Comment"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("add")]
-        public async Task<IActionResult> post([FromBody] AddCommentDTO Comment)
+        public async Task<IActionResult> post([FromBody] AddCommentDTO comment)
         {
-            var valid = await _validateUserService.ValidateUserId(Comment.UserId);
+            if (comment == null || !ModelState.IsValid)
+            {
+                var notFound = new ResultNotFound()
+                {
+                    messageType = nameof(MessageTypeResultEnum.Warning),
+                    error = true,
+                    messages = new string[]
+                    {
+                          "os parâmetros obrigatórios não podem estar vazios"
+                    }
+                };
+                return Unauthorized(notFound);
+            }
+
+            var valid = await _validateUserService.ValidateUserId(comment.userId);
 
             if (valid.error)
             {
@@ -113,9 +158,7 @@ namespace TaskMaster.Controllers
                 return Unauthorized(notFound);
             }
 
-            if (Comment == null) return BadRequest();
-
-            var result = await _CommentService.Create(Comment, valid.result);
+            var result = await _CommentService.Create(comment, valid.result);
 
             return Ok(result);
         }
@@ -124,16 +167,30 @@ namespace TaskMaster.Controllers
         ///
         /// </summary>
         /// <remarks>
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440001 = manager;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440001 = manager;
         /// </remarks>
         /// <param name="userId"></param>
-        /// <param name="Commentdata"></param>
+        /// <param name="commentData"></param>
         /// <returns></returns>
         [HttpPut]
         [Route("Update")]
-        public async Task<IActionResult> Update(string userId, Comment Commentdata)
+        public async Task<IActionResult> Update(string userId, Comment commentData)
         {
+            if (string.IsNullOrEmpty(userId) || commentData == null || !ModelState.IsValid)
+            {
+                var notFound = new ResultNotFound()
+                {
+                    messageType = nameof(MessageTypeResultEnum.Warning),
+                    error = true,
+                    messages = new string[]
+                    {
+                          "os parâmetros obrigatórios não podem estar vazios"
+                    }
+                };
+                return Unauthorized(notFound);
+            }
+
             var valid = await _validateUserService.ValidateUserId(userId);
 
             if (valid.error)
@@ -147,9 +204,9 @@ namespace TaskMaster.Controllers
 
                 return Unauthorized(notFound);
             }
-            if (Commentdata == null) return BadRequest();
+            if (commentData == null) return BadRequest();
 
-            var result = await _CommentService.Update(Commentdata, valid.result);
+            var result = await _CommentService.Update(commentData, valid.result);
 
             return Ok(result);
         }
@@ -158,8 +215,8 @@ namespace TaskMaster.Controllers
         ///
         /// </summary>
         /// <remarks>
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
-        /// -UserId = 123e4567-e89b-12d3-a456-426655440001 = manager;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440000 = usuario;
+        /// -userId = 123e4567-e89b-12d3-a456-426655440001 = manager;
         /// </remarks>
         /// <param name="id"></param>
         /// <param name="userId"></param>
@@ -168,6 +225,20 @@ namespace TaskMaster.Controllers
         [Route("Delete")]
         public async Task<IActionResult> Delete(string id, string userId)
         {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(id))
+            {
+                var notFound = new ResultNotFound()
+                {
+                    messageType = nameof(MessageTypeResultEnum.Warning),
+                    error = true,
+                    messages = new string[]
+                    {
+                        "userId ou id não pode estar vazio"
+                    }
+                };
+                return Unauthorized(notFound);
+            }
+
             var valid = await _validateUserService.ValidateUserId(userId);
 
             if (valid.error)

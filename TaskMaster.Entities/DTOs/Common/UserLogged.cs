@@ -2,7 +2,7 @@
 {
     public class UserLogged
     {
-        public string UserId
+        public string userId
         {
             get; set;
         }

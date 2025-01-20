@@ -2,6 +2,7 @@
 using TaskMaster.Domain.Services.Abstractions;
 using TaskMaster.Entities.DTOs.Common;
 using TaskMaster.Entities.Enums;
+using TaskMaster.Entities.Security;
 
 namespace TaskMaster.Domain.Services.Implementations
 {
@@ -19,6 +20,18 @@ namespace TaskMaster.Domain.Services.Implementations
             var resultData = new DataResult<UserLogged>();
             try
             {
+                if (string.IsNullOrEmpty(id))
+                {
+                    resultData.messageType = nameof(MessageTypeResultEnum.Warning);
+                    resultData.error = true;
+                    resultData.result = null;
+                    resultData.messages = new List<string>()
+                    {
+                        "Usuário não registrado"
+                    };
+                    return resultData;
+                }
+
                 var row = await _repository.ValidateExternalUserAsync(id.Trim());
 
                 if (row == null)

@@ -23,7 +23,7 @@ namespace TaskMaster.Domain.Data.Repository
                              && u.IsDeleted == false
                              select new UserLogged()
                              {
-                                 UserId = u.Id,
+                                 userId = u.Id,
                                  IsManager = p.Name == "manager"
                              }).FirstOrDefaultAsync();
 

@@ -17,7 +17,7 @@ namespace TaskMaster.Entities.DTOs
         }
 
         [Required]
-        public string UserId
+        public string userId
         {
             get; set;
         }

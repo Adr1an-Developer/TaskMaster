@@ -4,12 +4,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskMaster", "TaskMaster\TaskMaster.csproj", "{A9326D4B-4296-4725-BFAD-2F8DBF1280C7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1F4654E5-331A-49F7-89F6-99B2726C709E} = {1F4654E5-331A-49F7-89F6-99B2726C709E}
+		{8590FF54-2056-4266-A797-9855442EA5FF} = {8590FF54-2056-4266-A797-9855442EA5FF}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskMaster.Domain", "TaskMaster.Domain\TaskMaster.Domain.csproj", "{21584EE3-49C5-407E-84F3-6A26DDD9E124}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskMaster.Entities", "TaskMaster.Entities\TaskMaster.Entities.csproj", "{8590FF54-2056-4266-A797-9855442EA5FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskMaster.Helpers", "TaskMaster.Helpers\TaskMaster.Helpers.csproj", "{1F4654E5-331A-49F7-89F6-99B2726C709E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{7679B0E8-F9DD-4D2B-8256-7D7C74EAC6F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskMasterTest", "TaskMasterTest\TaskMasterTest.csproj", "{62BCD4A0-80BB-4D2D-9576-4C27D747F89E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +41,16 @@ Global
 		{1F4654E5-331A-49F7-89F6-99B2726C709E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F4654E5-331A-49F7-89F6-99B2726C709E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F4654E5-331A-49F7-89F6-99B2726C709E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62BCD4A0-80BB-4D2D-9576-4C27D747F89E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62BCD4A0-80BB-4D2D-9576-4C27D747F89E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62BCD4A0-80BB-4D2D-9576-4C27D747F89E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62BCD4A0-80BB-4D2D-9576-4C27D747F89E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{62BCD4A0-80BB-4D2D-9576-4C27D747F89E} = {7679B0E8-F9DD-4D2B-8256-7D7C74EAC6F5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C42264B3-1954-4473-847A-540AC78C0493}

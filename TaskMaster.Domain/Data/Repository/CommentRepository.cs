@@ -14,7 +14,7 @@ namespace TaskMaster.Domain.Data.Repository
             var rows = await (from t in Context.GetDbSet<Entities.Master.Comment>()
                               where t.IsDeleted == false
                               && t.IsActive == true
-                              && t.CreateByUser == LoggedUserId
+                              && t.CreateByUser == LoggeduserId
                               && t.TaskId == t.TaskId
                               select new Entities.Master.Comment()
                               {
@@ -37,7 +37,7 @@ namespace TaskMaster.Domain.Data.Repository
             var row = await (from t in Context.GetDbSet<Entities.Master.Comment>()
                              where t.IsActive == true
                              && t.IsDeleted == false
-                             && t.CreateByUser == LoggedUserId
+                             && t.CreateByUser == LoggeduserId
                              && t.Id.Equals(id)
                              select new Entities.Master.Comment()
                              {
