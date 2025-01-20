@@ -8,7 +8,13 @@ namespace TaskMaster.Entities.Master
     public class Task : AuditEntity
     {
         [Column("id")]
-        public Guid Id
+        public string Id
+        {
+            get; set;
+        }
+
+        [Column("project_id")]
+        public string ProjectId
         {
             get; set;
         }
@@ -26,13 +32,13 @@ namespace TaskMaster.Entities.Master
         }
 
         [Column("status")]
-        public Enums.TaskStatus Status
+        public string Status
         {
             get; set;
         }
 
         [Column("priority")]
-        public TaskPriority Priority
+        public string Priority
         {
             get; set;
         }

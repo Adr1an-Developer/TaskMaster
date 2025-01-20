@@ -7,19 +7,13 @@ namespace TaskMaster.Entities.Security
     public class User : AuditEntity
     {
         [Column("id")]
-        public Guid Id
-        {
-            get; set;
-        }
-
-        [Column("user_name")]
-        public string UserName
+        public string Id
         {
             get; set;
         }
 
         [Column("profile_id")]
-        public Guid ProfileId
+        public string ProfileId
         {
             get; set;
         }

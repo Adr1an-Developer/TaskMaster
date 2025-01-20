@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using TaskMaster.Entities.Common;
+using TaskMaster.Entities.Enums;
 
 namespace TaskMaster.Entities.Master
 {
@@ -7,7 +9,7 @@ namespace TaskMaster.Entities.Master
     public class Project : AuditEntity
     {
         [Column("id")]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Id { get; set; } = string.Empty;
 
         [Column("name")]
         public string Name
@@ -15,7 +17,34 @@ namespace TaskMaster.Entities.Master
             get; set;
         }
 
+        [Column("description")]
+        public string Description
+        {
+            get; set;
+        }
+
+        [JsonIgnore]
         [NotMapped]
-        public List<Task> Tasks { get; set; } = new();
+        public List<Task>? Tasks { get; set; } = new();
+
+        [JsonIgnore]
+        [NotMapped]
+        public bool AllCompleted
+        {
+            get
+            {
+                return !Tasks.Any(x => x.Status != nameof(Enums.TaskStatus.Completed));
+            }
+        }
+
+        [JsonIgnore]
+        [NotMapped]
+        public bool CanCreate
+        {
+            get
+            {
+                return Tasks.Count() < 20;
+            }
+        }
     }
 }

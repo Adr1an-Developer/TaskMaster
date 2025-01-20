@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using TaskMaster.Domain.Data.Abstractions;
+using TaskMaster.Entities.DTOs.Common;
 
 namespace TaskMaster.Domain.Data.Repository
 {
@@ -13,7 +14,7 @@ namespace TaskMaster.Domain.Data.Repository
             get; private set;
         }
 
-        public bool IsAdmin
+        public bool IsManager
         {
             get; private set;
         }
@@ -25,10 +26,10 @@ namespace TaskMaster.Domain.Data.Repository
 
         public IUnitOfWork UnitOfWork => Context;
 
-        public void SetLoggedUserInfo(string loggedUserId, bool isAdmin)
+        public void SetLoggedUserInfo(UserLogged userInfo)
         {
-            LoggedUserId = loggedUserId;
-            IsAdmin = isAdmin;
+            LoggedUserId = userInfo.UserId;
+            IsManager = userInfo.IsManager;
         }
 
         public async Task<IEnumerable<TEntity>> FindAllAsync()
@@ -39,7 +40,7 @@ namespace TaskMaster.Domain.Data.Repository
                   .ToListAsync();
         }
 
-        public async Task<TEntity> FindbyIdAsync(Guid id)
+        public async Task<TEntity> FindbyIdAsync(string id)
         {
             var result = await Context.GetDbSet<TEntity>().FirstOrDefaultAsync(t => t.Equals(id));
             return result;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using TaskMaster.Entities.DTOs.Common;
 
 namespace TaskMaster.Domain.Data.Abstractions
 {
@@ -13,6 +14,18 @@ namespace TaskMaster.Domain.Data.Abstractions
         {
             get;
         }
+
+        string LoggedUserId
+        {
+            get;
+        }
+
+        bool IsManager
+        {
+            get;
+        }
+
+        void SetLoggedUserInfo(UserLogged userInfo);
 
         Task<IEnumerable<TEntity>> FindAllAsync();
 

@@ -7,7 +7,7 @@ namespace TaskMaster.Entities.Security
     public class Profile : AuditEntityNotUserFields
     {
         [Column("id")]
-        public Guid Id
+        public string Id
         {
             get; set;
         }

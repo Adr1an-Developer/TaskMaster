@@ -13,7 +13,7 @@ namespace TaskMaster.Entities.Master
 
     {
         [Column("id")]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Id { get; set; } = string.Empty;
 
         public Guid TaskId
         {

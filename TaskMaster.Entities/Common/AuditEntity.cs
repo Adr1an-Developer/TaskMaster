@@ -28,7 +28,7 @@ namespace TaskMaster.Entities.Common
         }
 
         [Column("create_by_user")]
-        public Guid? CreateByUser
+        public string? CreateByUser
         {
             get; set;
         }
@@ -40,7 +40,7 @@ namespace TaskMaster.Entities.Common
         }
 
         [Column("update_by_user")]
-        public Guid? UpdateByUser
+        public string? UpdateByUser
         {
             get; set;
         }
@@ -56,7 +56,7 @@ namespace TaskMaster.Entities.Common
     public class AuditEntityWithID
     {
         [Column("id")]
-        public Guid Id
+        public string Id
         {
             get; set;
         }
@@ -80,7 +80,7 @@ namespace TaskMaster.Entities.Common
         }
 
         [Column("create_by_user")]
-        public Guid? CreateByUser
+        public string? CreateByUser
         {
             get; set;
         }
@@ -92,7 +92,7 @@ namespace TaskMaster.Entities.Common
         }
 
         [Column("update_by_user")]
-        public Guid? UpdateByUser
+        public string? UpdateByUser
         {
             get; set;
         }

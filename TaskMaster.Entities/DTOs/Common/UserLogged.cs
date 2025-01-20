@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TaskMaster.Entities.Common;
 
-namespace TaskMaster.Entities.Master
+namespace TaskMaster.Entities.DTOs.Common
 {
-    public class Comment : AuditEntity
+    public class UserLogged
     {
-        public string Id
+        public string UserId
         {
             get; set;
         }
 
-        public string Text
+        public bool IsManager
         {
             get; set;
-        }
+        } = false;
     }
 }
