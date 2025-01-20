@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using TaskMaster.Entities.Common;
 using TaskMaster.Entities.Master;
 
 namespace TaskMaster.Entities.DTOs
 {
-    public class TaskOutputDTO
+    public class TaskOutputDTO : AuditEntity
     {
         public string Id
         {

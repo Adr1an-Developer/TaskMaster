@@ -14,11 +14,13 @@ namespace TaskMaster.Domain.Services.Implementations
     {
         private readonly ITaskRepository _repository;
         private readonly IProjectRepository _projectRepository;
+        private readonly IChangeHistoryRepository _changeHistoryRepository;
 
-        public TaskService(ITaskRepository repository, IProjectRepository projectRepository) : base(repository)
+        public TaskService(ITaskRepository repository, IProjectRepository projectRepository, IChangeHistoryRepository changeHistoryRepository) : base(repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _projectRepository = projectRepository ?? throw new ArgumentNullException(nameof(projectRepository));
+            _changeHistoryRepository = changeHistoryRepository ?? throw new ArgumentNullException(nameof(changeHistoryRepository));
         }
 
         public async Task<DataResult<TaskOutputDTO>> Create(AddTaskDTO entity, UserLogged userInfo)
@@ -114,7 +116,11 @@ namespace TaskMaster.Domain.Services.Implementations
                     Status = newRow.Status,
                     Title = newRow.Title,
                     ChangeHistories = newRow.ChangeHistories,
-                    Comments = newRow.Comments
+                    Comments = newRow.Comments,
+                    CreateByUser = newRow.CreateByUser,
+                    IsDeleted = newRow.IsDeleted,
+                    CreationDate = newRow.CreationDate,
+                    IsActive = newRow.IsActive,
                 };
 
                 resultData.messageType = nameof(MessageTypeResultEnum.Info);
@@ -207,7 +213,13 @@ namespace TaskMaster.Domain.Services.Implementations
                         ChangeHistories = x.ChangeHistories,
                         Comments = x.Comments,
                         Priority = x.Priority,
-                        Status = x.Status
+                        Status = x.Status,
+                        CreateByUser = x.CreateByUser,
+                        IsDeleted = x.IsDeleted,
+                        CreationDate = x.CreationDate,
+                        IsActive = x.IsActive,
+                        ModificationDate = x.ModificationDate,
+                        UpdateByUser = x.UpdateByUser,
                     }
                 ).ToList();
 
@@ -262,7 +274,13 @@ namespace TaskMaster.Domain.Services.Implementations
                     Comments = row.Comments,
                     ChangeHistories = row.ChangeHistories,
                     ProjectId = row.ProjectId,
-                    Title = row.Title
+                    Title = row.Title,
+                    CreateByUser = row.CreateByUser,
+                    IsDeleted = row.IsDeleted,
+                    CreationDate = row.CreationDate,
+                    IsActive = row.IsActive,
+                    UpdateByUser = row.UpdateByUser,
+                    ModificationDate = row.ModificationDate,
                 };
                 resultData.messageType = nameof(MessageTypeResultEnum.Info);
                 resultData.error = false;
@@ -314,7 +332,13 @@ namespace TaskMaster.Domain.Services.Implementations
                     Comments = row.Comments,
                     ChangeHistories = row.ChangeHistories,
                     ProjectId = row.ProjectId,
-                    Title = row.Title
+                    Title = row.Title,
+                    ModificationDate = row.ModificationDate,
+                    UpdateByUser = row.UpdateByUser,
+                    IsActive = row.IsActive,
+                    CreationDate = row.CreationDate,
+                    IsDeleted = row.IsDeleted,
+                    CreateByUser = row.CreateByUser
                 };
 
                 resultData.messageType = nameof(MessageTypeResultEnum.Info);
@@ -380,7 +404,7 @@ namespace TaskMaster.Domain.Services.Implementations
                     resultData.result = null;
                     resultData.messages = new List<string>()
                     {
-                        "Dados não encontrados."
+                        "Após criar a tarefa, a prioridade não pode ser modificada."
                     };
                     return resultData;
                 }
@@ -391,16 +415,45 @@ namespace TaskMaster.Domain.Services.Implementations
                 await _repository.Update(entity);
                 await _repository.UnitOfWork.SaveAsync();
 
+                var NewData = await _repository.GetById(oldData.Id);
+
+                var ChangeHistory = String.Join("; ", NewData.CompareWith(oldData));
+                if (!string.IsNullOrEmpty(ChangeHistory))
+                {
+                    var newId = Guid.NewGuid().ToString();
+
+                    var history = new ChangeHistory
+                    {
+                        Id = newId,
+                        CreateByUser = userInfo.UserId,
+                        ChangeDetails = ChangeHistory,
+                        TaskId = oldData.Id,
+                        IsActive = true,
+                        IsDeleted = false,
+                        CreationDate = DateTime.UtcNow,
+                    };
+                    await _changeHistoryRepository.CreateAsync(history);
+                    await _changeHistoryRepository.UnitOfWork.SaveAsync();
+                }
+
+                var newHistory = await _changeHistoryRepository.GetAll(oldData.Id);
+
                 var result = new TaskOutputDTO()
                 {
-                    Description = entity.Description,
-                    Id = entity.Id,
-                    Priority = entity.Priority,
-                    ChangeHistories = entity.ChangeHistories,
-                    Comments = entity.Comments,
-                    ProjectId = entity.ProjectId,
-                    Status = entity.Status,
-                    Title = entity.Title
+                    Description = NewData.Description,
+                    Id = NewData.Id,
+                    Priority = NewData.Priority,
+                    ChangeHistories = newHistory.ToList(),
+                    Comments = NewData.Comments,
+                    ProjectId = NewData.ProjectId,
+                    Status = NewData.Status,
+                    Title = NewData.Title,
+                    CreateByUser = NewData.CreateByUser,
+                    CreationDate = NewData.CreationDate,
+                    IsDeleted = NewData.IsDeleted,
+                    IsActive = NewData.IsActive,
+                    UpdateByUser = NewData.UpdateByUser,
+                    ModificationDate = NewData.ModificationDate
                 };
 
                 resultData.messageType = nameof(MessageTypeResultEnum.Info);

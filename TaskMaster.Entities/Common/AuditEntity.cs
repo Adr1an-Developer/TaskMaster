@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -9,24 +10,28 @@ namespace TaskMaster.Entities.Common
 {
     public class AuditEntity
     {
+        [Required]
         [Column("is_active")]
         public bool? IsActive
         {
             get; set;
         }
 
+        [Required]
         [Column("is_deleted")]
         public bool? IsDeleted
         {
             get; set;
         }
 
+        [Required]
         [Column("creation_date")]
         public DateTimeOffset? CreationDate
         {
             get; set;
         }
 
+        [Required]
         [Column("create_by_user")]
         public string? CreateByUser
         {

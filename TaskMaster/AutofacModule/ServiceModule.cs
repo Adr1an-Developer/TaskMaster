@@ -23,6 +23,10 @@ namespace TaskMaster.AutofacModule
                  .RegisterType<TaskService>()
                  .As<ITaskService>()
                  .InstancePerLifetimeScope();
+            builder
+                 .RegisterType<CommentService>()
+                 .As<ICommentService>()
+                 .InstancePerLifetimeScope();
         }
     }
 }

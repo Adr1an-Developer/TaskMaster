@@ -10,46 +10,31 @@ using TaskMaster.Entities.Master;
 
 namespace TaskMaster.Domain.Services.Implementations
 {
-    public class ProjectService : ServiceBase<Project>, IProjectService
+    public class CommentService : ServiceBase<Comment>, ICommentService
     {
-        private readonly IProjectRepository _repository;
+        private readonly ICommentRepository _repository;
+        private readonly IChangeHistoryRepository _changeHistoryRepository;
 
         private string _serviceName;
 
-        public ProjectService(IProjectRepository repository) : base(repository)
+        public CommentService(ICommentRepository repository, IChangeHistoryRepository changeHistoryRepository) : base(repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _changeHistoryRepository = changeHistoryRepository ?? throw new ArgumentNullException(nameof(changeHistoryRepository));
         }
 
-        public async Task<DataResult<ProjectOutputDTO>> Create(AddProjectDTO entity, UserLogged userInfo)
+        public async Task<DataResult<CommentOutputDTO>> Create(AddCommentDTO entity, UserLogged userInfo)
         {
             _repository.SetLoggedUserInfo(userInfo);
-            var resultData = new DataResult<ProjectOutputDTO>();
+            var resultData = new DataResult<CommentOutputDTO>();
             try
             {
-                var item = await _repository.FindByConditionAsync(x => x.Name.Trim().ToLower() == entity.Name.Trim().ToLower()
-                                                                 && x.IsDeleted == false
-                                                                 && x.CreateByUser == userInfo.UserId);
-
-                if (item.Any())
-                {
-                    resultData.messageType = nameof(MessageTypeResultEnum.Warning);
-                    resultData.error = true;
-                    resultData.id = string.Empty;
-                    resultData.result = null;
-                    resultData.messages = new List<string>()
-                    {
-                       $"O projeto {entity.Name} já existe"
-                    };
-                    return resultData;
-                }
-
                 var newId = Guid.NewGuid().ToString();
 
-                var newRow = new Project()
+                var newRow = new Comment()
                 {
                     Id = newId,
-                    Name = entity.Name,
+                    TaskId = entity.TaskId,
                     Description = entity.Description,
                     CreateByUser = userInfo.UserId,
                     IsActive = true,
@@ -61,14 +46,11 @@ namespace TaskMaster.Domain.Services.Implementations
 
                 await _repository.UnitOfWork.SaveAsync();
 
-                var resultNew = new ProjectOutputDTO()
+                var resultNew = new CommentOutputDTO()
                 {
-                    AllCompleted = newRow.AllCompleted,
-                    CanCreate = newRow.CanCreate,
+                    TaskId = newRow.TaskId,
                     Description = newRow.Description,
                     Id = newRow.Id,
-                    Name = newRow.Name,
-                    Tasks = newRow.Tasks,
                     ModificationDate = newRow.ModificationDate,
                     CreateByUser = newRow.CreateByUser,
                     UpdateByUser = newRow.UpdateByUser,
@@ -100,40 +82,24 @@ namespace TaskMaster.Domain.Services.Implementations
             }
         }
 
-        public async Task<DataResult<ProjectOutputDTO>> Delete(string id, UserLogged userInfo)
+        public async Task<DataResult<CommentOutputDTO>> Delete(string id, UserLogged userInfo)
         {
             _repository.SetLoggedUserInfo(userInfo);
-            var resultData = new DataResult<ProjectOutputDTO>();
+            var resultData = new DataResult<CommentOutputDTO>();
             try
             {
                 var row = await _repository.GetById(id);
-
-                if (!row.AllCompleted)
-                {
-                    resultData.messageType = nameof(MessageTypeResultEnum.Warning);
-                    resultData.error = true;
-                    resultData.id = string.Empty;
-                    resultData.result = null;
-                    resultData.messages = new List<string>()
-                    {
-                       $"O projeto {row.Name} não pode ser excluído se todas as suas tarefas não forem concluídas. Conclua as tarefas ou exclua-as antes de excluir o projeto."
-                    };
-                    return resultData;
-                }
 
                 row.Delete();
 
                 await _repository.Update(row);
                 await _repository.UnitOfWork.SaveAsync();
 
-                var result = new ProjectOutputDTO()
+                var result = new CommentOutputDTO()
                 {
-                    AllCompleted = true,
-                    CanCreate = true,
                     Description = row.Description,
                     Id = row.Id,
-                    Name = row.Name,
-                    Tasks = row.Tasks,
+                    TaskId = row.TaskId,
                     ModificationDate = row.ModificationDate,
                     CreateByUser = row.CreateByUser,
                     UpdateByUser = row.UpdateByUser,
@@ -148,7 +114,7 @@ namespace TaskMaster.Domain.Services.Implementations
                 resultData.result = result;
                 resultData.messages = new List<string>()
                 {
-                    $"Projeto {row.Name} excluído com sucesso"
+                    $"Comentario excluído com sucesso"
                 };
                 return resultData;
             }
@@ -165,13 +131,13 @@ namespace TaskMaster.Domain.Services.Implementations
             }
         }
 
-        public async Task<DataResults<ProjectOutputDTO>> GetAll(UserLogged userInfo)
+        public async Task<DataResults<CommentOutputDTO>> GetAll(string taskId, UserLogged userInfo)
         {
             _repository.SetLoggedUserInfo(userInfo);
-            var resultData = new DataResults<ProjectOutputDTO>();
+            var resultData = new DataResults<CommentOutputDTO>();
             try
             {
-                var rows = await _repository.GetAll();
+                var rows = await _repository.GetAll(taskId);
 
                 if (!rows.Any())
                 {
@@ -187,14 +153,11 @@ namespace TaskMaster.Domain.Services.Implementations
 
                 var results = rows.Select(x =>
 
-                    new ProjectOutputDTO
+                    new CommentOutputDTO
                     {
-                        AllCompleted = x.AllCompleted,
-                        CanCreate = x.CanCreate,
+                        TaskId = x.TaskId,
                         Description = x.Description,
                         Id = x.Id,
-                        Name = x.Name,
-                        Tasks = x.Tasks,
                         ModificationDate = x.ModificationDate,
                         CreateByUser = x.CreateByUser,
                         UpdateByUser = x.UpdateByUser,
@@ -227,10 +190,10 @@ namespace TaskMaster.Domain.Services.Implementations
             }
         }
 
-        public async Task<DataResult<ProjectOutputDTO>> GetbyId(string id, UserLogged userInfo)
+        public async Task<DataResult<CommentOutputDTO>> GetbyId(string id, UserLogged userInfo)
         {
             _repository.SetLoggedUserInfo(userInfo);
-            var resultData = new DataResult<ProjectOutputDTO>();
+            var resultData = new DataResult<CommentOutputDTO>();
             try
             {
                 var row = await _repository.GetById(id);
@@ -246,14 +209,11 @@ namespace TaskMaster.Domain.Services.Implementations
                     };
                     return resultData;
                 }
-                var result = new ProjectOutputDTO()
+                var result = new CommentOutputDTO()
                 {
-                    AllCompleted = row.AllCompleted,
-                    CanCreate = row.CanCreate,
+                    TaskId = row.TaskId,
                     Description = row.Description,
                     Id = row.Id,
-                    Name = row.Name,
-                    Tasks = row.Tasks,
                     ModificationDate = row.ModificationDate,
                     CreateByUser = row.CreateByUser,
                     UpdateByUser = row.UpdateByUser,
@@ -283,67 +243,10 @@ namespace TaskMaster.Domain.Services.Implementations
             }
         }
 
-        public async Task<DataResult<ProjectOutputDTO>> GetByName(string name, UserLogged userInfo)
+        public async Task<DataResult<CommentOutputDTO>> Update(Comment entity, UserLogged userInfo)
         {
             _repository.SetLoggedUserInfo(userInfo);
-            var resultData = new DataResult<ProjectOutputDTO>();
-            try
-            {
-                var row = await _repository.GetByName(name);
-
-                if (row == null)
-                {
-                    resultData.messageType = nameof(MessageTypeResultEnum.Warning);
-                    resultData.error = false;
-                    resultData.result = null;
-                    resultData.messages = new List<string>()
-                    {
-                        "Dados não encontrados."
-                    };
-                    return resultData;
-                }
-                var result = new ProjectOutputDTO()
-                {
-                    AllCompleted = row.AllCompleted,
-                    CanCreate = row.CanCreate,
-                    Description = row.Description,
-                    Id = row.Id,
-                    Name = row.Name,
-                    Tasks = row.Tasks,
-                    ModificationDate = row.ModificationDate,
-                    CreateByUser = row.CreateByUser,
-                    UpdateByUser = row.UpdateByUser,
-                    CreationDate = row.CreationDate,
-                    IsActive = row.IsActive,
-                    IsDeleted = row.IsDeleted,
-                };
-
-                resultData.messageType = nameof(MessageTypeResultEnum.Info);
-                resultData.error = false;
-                resultData.result = result;
-                resultData.messages = new List<string>()
-                {
-                    "Dado encontrado"
-                };
-                return resultData;
-            }
-            catch (Exception ex)
-            {
-                resultData.messageType = nameof(MessageTypeResultEnum.Error);
-                resultData.error = true;
-                resultData.result = null;
-                resultData.messages = new List<string>()
-                {
-                    ex.Message
-                };
-                return resultData;
-            }
-        }
-
-        public async Task<DataResult<ProjectOutputDTO>> Update(Project entity, UserLogged userInfo)
-        {
-            _repository.SetLoggedUserInfo(userInfo);
-            var resultData = new DataResult<ProjectOutputDTO>();
+            var resultData = new DataResult<CommentOutputDTO>();
             try
             {
                 entity.ModificationDate = DateTime.Now;
@@ -352,14 +255,26 @@ namespace TaskMaster.Domain.Services.Implementations
                 await _repository.Update(entity);
                 await _repository.UnitOfWork.SaveAsync();
 
-                var result = new ProjectOutputDTO()
+                var newId = Guid.NewGuid().ToString();
+
+                var history = new ChangeHistory
                 {
-                    AllCompleted = entity.AllCompleted,
-                    CanCreate = entity.CanCreate,
+                    Id = newId,
+                    CreateByUser = userInfo.UserId,
+                    ChangeDetails = $"Um comentário foi adicionado à tarefa.",
+                    TaskId = entity.Id,
+                    IsActive = true,
+                    IsDeleted = false,
+                    CreationDate = DateTime.UtcNow,
+                };
+                await _changeHistoryRepository.CreateAsync(history);
+                await _changeHistoryRepository.UnitOfWork.SaveAsync();
+
+                var result = new CommentOutputDTO()
+                {
+                    TaskId = entity.TaskId,
                     Description = entity.Description,
                     Id = entity.Id,
-                    Name = entity.Name,
-                    Tasks = entity.Tasks,
                     ModificationDate = entity.ModificationDate,
                     CreateByUser = entity.CreateByUser,
                     UpdateByUser = entity.UpdateByUser,
