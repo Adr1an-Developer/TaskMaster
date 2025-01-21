@@ -5,7 +5,7 @@ namespace TaskMaster.Domain.Data.Repository
 {
     public class ChangeHistoryRepository : GenericRepository<Entities.Master.ChangeHistory>, IChangeHistoryRepository
     {
-        public ChangeHistoryRepository(IEfDbContext context) : base(context)
+        public ChangeHistoryRepository(IEfDbContextBase context) : base(context)
         {
         }
 

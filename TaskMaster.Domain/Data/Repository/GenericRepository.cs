@@ -7,7 +7,7 @@ namespace TaskMaster.Domain.Data.Repository
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        protected readonly IEfDbContext Context;
+        protected readonly IEfDbContextBase Context;
 
         public string LoggeduserId
         {
@@ -19,7 +19,7 @@ namespace TaskMaster.Domain.Data.Repository
             get; private set;
         }
 
-        public GenericRepository(IEfDbContext context)
+        public GenericRepository(IEfDbContextBase context)
         {
             Context = context;
         }

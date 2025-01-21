@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mysqlx.Crud;
-using System.Threading.Tasks;
 using TaskMaster.Domain.Services.Abstractions;
 using TaskMaster.Entities.DTOs;
 using TaskMaster.Entities.DTOs.Common;
 using TaskMaster.Entities.Enums;
 using TaskMaster.Entities.Master;
-using TaskMaster.Entities.Security;
 
 namespace TaskMaster.Controllers
 {

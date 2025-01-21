@@ -3,7 +3,7 @@ using TaskMaster.Domain.Data.Abstractions;
 
 namespace TaskMaster.Domain.Data.Contexts
 {
-    public class EfDbContextBase : DbContext, IEfDbContext
+    public class EfDbContextBase : DbContext, IEfDbContextBase
     {
         private DbContextOptions<EfDbContextBase> options;
 

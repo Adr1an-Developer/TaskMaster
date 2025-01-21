@@ -7,9 +7,9 @@ namespace TaskMaster.Domain.Data.Repository
 {
     public class ValidateUserRepository : IValidateUserRepository
     {
-        protected readonly IEfDbContext Context;
+        protected readonly IEfDbContextBase Context;
 
-        public ValidateUserRepository(IEfDbContext context)
+        public ValidateUserRepository(IEfDbContextBase context)
         {
             Context = context;
         }

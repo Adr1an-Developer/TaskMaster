@@ -1,13 +1,14 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using MySql.EntityFrameworkCore.Extensions;
 using System.Reflection;
 using TaskMaster.AutofacModule;
 using TaskMaster.Domain.Data.Abstractions;
 using TaskMaster.Domain.Data.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//builder.AddServiceDefaults();
 
 builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
@@ -26,14 +27,16 @@ builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetSection("ConnectionStrings")["MyConn"];
 
-builder.Services.AddEntityFrameworkMySQL()
-        .AddDbContext<IEfDbContext, DatabaseContext>(item => item.UseMySQL(connectionString,
+Console.WriteLine(connectionString);
+
+builder.Services
+        .AddDbContext<IEfDbContextBase, DatabaseContext>(item => item.UseNpgsql(connectionString,
                                 b =>
                                 {
-                                    b.MigrationsAssembly("TaskMaster");
-                                    b.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), new List<int>());
+                                    b.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), new List<string>());
                                 }
-                                )
+                                ).EnableDetailedErrors(true)
+                                .LogTo(Console.WriteLine, LogLevel.Information)
         );
 
 builder.Services.AddSwaggerGen(c =>
@@ -44,6 +47,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+//app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

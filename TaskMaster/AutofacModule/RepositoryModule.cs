@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using TaskMaster.Domain.Data.Abstractions;
+using TaskMaster.Domain.Data.Contexts;
 using TaskMaster.Domain.Data.Repository;
 
 namespace TaskMaster.AutofacModule
@@ -11,6 +12,8 @@ namespace TaskMaster.AutofacModule
             builder.RegisterGeneric(typeof(GenericRepository<>))
                 .As(typeof(IGenericRepository<>))
                 .InstancePerLifetimeScope();
+
+            //   builder.RegisterType<EfDbContextBase>().As<IEfDbContextBase>().InstancePerLifetimeScope();
 
             builder.RegisterType<ValidateUserRepository>().As<IValidateUserRepository>().InstancePerLifetimeScope();
             builder.RegisterType<ProjectRepository>().As<IProjectRepository>().InstancePerLifetimeScope();

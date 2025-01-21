@@ -6,7 +6,7 @@ namespace TaskMaster.Domain.Data.Repository
 {
     public class ProjectRepository : GenericRepository<Project>, IProjectRepository
     {
-        public ProjectRepository(IEfDbContext context) : base(context)
+        public ProjectRepository(IEfDbContextBase context) : base(context)
         {
         }
 

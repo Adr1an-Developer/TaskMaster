@@ -6,7 +6,7 @@ namespace TaskMaster.Domain.Data.Repository
 {
     public class TaskRepository : GenericRepository<Entities.Master.Task>, ITaskRepository
     {
-        public TaskRepository(IEfDbContext context) : base(context)
+        public TaskRepository(IEfDbContextBase context) : base(context)
         {
         }
 

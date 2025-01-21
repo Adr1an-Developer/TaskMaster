@@ -5,7 +5,7 @@ namespace TaskMaster.Domain.Data.Repository
 {
     public class CommentRepository : GenericRepository<Entities.Master.Comment>, ICommentRepository
     {
-        public CommentRepository(IEfDbContext context) : base(context)
+        public CommentRepository(IEfDbContextBase context) : base(context)
         {
         }
 
