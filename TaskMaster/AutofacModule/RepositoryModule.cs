@@ -13,13 +13,12 @@ namespace TaskMaster.AutofacModule
                 .As(typeof(IGenericRepository<>))
                 .InstancePerLifetimeScope();
 
-            //   builder.RegisterType<EfDbContextBase>().As<IEfDbContextBase>().InstancePerLifetimeScope();
-
             builder.RegisterType<ValidateUserRepository>().As<IValidateUserRepository>().InstancePerLifetimeScope();
             builder.RegisterType<ProjectRepository>().As<IProjectRepository>().InstancePerLifetimeScope();
             builder.RegisterType<TaskRepository>().As<ITaskRepository>().InstancePerLifetimeScope();
             builder.RegisterType<ChangeHistoryRepository>().As<IChangeHistoryRepository>().InstancePerLifetimeScope();
             builder.RegisterType<CommentRepository>().As<ICommentRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<ReportsRepository>().As<IReportsRepository>().InstancePerLifetimeScope();
         }
     }
 }
