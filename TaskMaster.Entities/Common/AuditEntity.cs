@@ -21,14 +21,14 @@ namespace TaskMaster.Entities.Common
 
         [Required]
         [Column("creation_date")]
-        public DateTimeOffset? CreationDate
+        public DateTimeOffset CreationDate
         {
             get; set;
         }
 
         [Required]
         [Column("create_by_user")]
-        public string? CreateByUser
+        public string CreateByUser
         {
             get; set;
         }
@@ -47,7 +47,7 @@ namespace TaskMaster.Entities.Common
 
         public void Delete()
         {
-            ModificationDate = DateTime.Now;
+            ModificationDate = DateTime.UtcNow;
             IsActive = false;
             IsDeleted = true;
         }
@@ -99,7 +99,7 @@ namespace TaskMaster.Entities.Common
 
         public void Delete()
         {
-            ModificationDate = DateTime.Now;
+            ModificationDate = DateTime.UtcNow;
             IsActive = false;
             IsDeleted = true;
         }

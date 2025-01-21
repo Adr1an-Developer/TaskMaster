@@ -343,7 +343,7 @@ namespace TaskMaster.Domain.Services.Implementations
             var resultData = new DataResult<ProjectOutputDTO>();
             try
             {
-                entity.ModificationDate = DateTime.Now;
+                entity.ModificationDate = DateTime.UtcNow;
                 entity.UpdateByUser = userInfo.userId;
 
                 await _repository.Update(entity);

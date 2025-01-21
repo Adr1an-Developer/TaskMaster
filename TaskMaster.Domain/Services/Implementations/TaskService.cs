@@ -406,7 +406,7 @@ namespace TaskMaster.Domain.Services.Implementations
                     return resultData;
                 }
 
-                entity.ModificationDate = DateTime.Now;
+                entity.ModificationDate = DateTime.UtcNow;
                 entity.UpdateByUser = userInfo.userId;
 
                 await _repository.Update(entity);

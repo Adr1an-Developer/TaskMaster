@@ -22,7 +22,7 @@ namespace TaskMaster.Domain.Data.Repository
 
         public async Task<IEnumerable<StatusTaskbyProjectOutputDTO>> GetAllStatusTaskbyProject(int lastDays = 15)
         {
-            var date = DateTimeOffset.Now.AddDays(lastDays * -1);
+            var date = DateTime.UtcNow.AddDays(lastDays * -1);
 
             var result = await (from p in Context.GetDbSet<Project>()
                                 join t in Context.GetDbSet<Entities.Master.Task>() on p.Id equals t.ProjectId
