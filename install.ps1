@@ -40,23 +40,23 @@ function BuildAndDeployService {
 
 # Menú principal
 function Show-Menu {
-    param (
-        [string]$Title = 'Gestión de Backup PostgreSQL en Docker'
+   param (
+        [string]$Title = 'Gerenciamento de TaskMaster no Docker'
     )
     Write-Host "==================== $Title ===================="
-    Write-Host "1. Reconstruir y desplegar servicio"
+    Write-Host "1. Reconstruir e implantar o serviço"
     Write-Host "2. Realizar backup"
-    Write-Host "3. Restaurar desde backup"
-    Write-Host "4. Salir"
+    Write-Host "3. Restaurar a partir do backup"
+    Write-Host "4. Sair"
     Write-Host "================================================"
 
-    $choice = Read-Host "Seleccione una opción (1-4)"
+    $choice = Read-Host "Selecione uma opção (1-4)"
     switch ($choice) {
         '1' { BuildAndDeployService }
         '2' { Backup-Database }
         '3' { Restore-Database }
         '4' { Exit }
-        default { Write-Host "Opción no válida, intente de nuevo." }
+        default { Write-Host "Opção inválida, tente novamente." }
     }
 }
 
