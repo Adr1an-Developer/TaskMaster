@@ -25,6 +25,11 @@ namespace TaskMaster.Entities.DTOs
             get; set;
         }
 
+        public DateTimeOffset ExpirationDate
+        {
+            get; set;
+        }
+
         public string Status
         {
             get; set;

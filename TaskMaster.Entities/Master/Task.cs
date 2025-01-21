@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using TaskMaster.Entities.Common;
 
@@ -27,6 +28,13 @@ namespace TaskMaster.Entities.Master
 
         [Column("description")]
         public string Description
+        {
+            get; set;
+        }
+
+        [Required]
+        [Column("expiration_date")]
+        public DateTimeOffset ExpirationDate
         {
             get; set;
         }
